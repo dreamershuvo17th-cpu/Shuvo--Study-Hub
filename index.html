@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101827">
+<title>Shuvo Study Hub</title>
+<style>
+:root{--bg:#f4f7fb;--card:#fff;--ink:#17243a;--blue:#376cf6;--muted:#64748b;--line:#e3e9f2}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Arial,"Noto Sans Bengali",sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+header{background:#101827;color:#fff;padding:18px 16px}
+.wrap{max-width:900px;margin:auto}
+.brand{font-size:22px;font-weight:800}
+header p{color:#cbd5e1;margin:4px 0 0}
+nav{display:flex;gap:8px;overflow-x:auto;padding:12px 0 0}
+nav a{color:white;text-decoration:none;white-space:nowrap;background:#26354c;padding:8px 12px;border-radius:9px}
+main{padding:16px}
+.hero{background:linear-gradient(135deg,#1d3260,#376cf6);color:#fff;border-radius:18px;padding:24px 20px}
+.hero h1{margin:0 0 8px;font-size:27px}
+.hero p{margin:0 0 16px}
+button,select{border:0;border-radius:9px;padding:11px 14px;font:inherit;cursor:pointer}
+button{background:var(--blue);color:white}
+.hero button{background:white;color:#1d3260;font-weight:bold}
+section{margin-top:24px;scroll-margin-top:12px}
+h2{font-size:21px;margin:0 0 12px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{background:var(--card);padding:16px;border-radius:14px;border:1px solid var(--line);min-width:0}
+.card h3{margin:0 0 6px;font-size:17px}
+.muted{color:var(--muted);font-size:14px}
+.row{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.bar{height:10px;background:#e6ebf4;border-radius:10px;overflow:hidden}
+#progressBar{height:100%;background:#22a06b;width:0%;transition:width .2s}
+select{width:100%;border:1px solid var(--line);background:white;margin:6px 0 12px}
+.option{display:block;width:100%;text-align:left;margin:8px 0;background:#edf2ff;color:#1e3a8a}
+.option:disabled{cursor:default;opacity:1}
+footer{text-align:center;color:var(--muted);padding:28px 12px}
+@media(min-width:650px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}main{padding:24px 18px}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div class="brand">📚 Shuvo Study Hub</div>
+  <p>Learn Today, Lead Tomorrow</p>
+  <nav>
+    <a href="#home">Home</a><a href="#subjects">Subjects</a><a href="#practice">MCQ Practice</a><a href="#routine">Routine</a><a href="#progress">My Progress</a>
+  </nav>
+</div></header>
+<main class="wrap">
+  <div class="hero" id="home">
+    <h1>Your Future Starts Here!</h1>
+    <p>পড়াশোনা করো, অনুশীলন করো, নিজের লক্ষ্যের দিকে এগিয়ে যাও।</p>
+    <button onclick="document.querySelector('#subjects').scrollIntoView({behavior:'smooth'})">Explore Subjects →</button>
+  </div>
+  <section id="subjects">
+    <h2>📖 Study Subjects</h2>
+    <div class="grid">
+      <div class="card"><h3>বাংলা</h3><p class="muted">১ম ও ২য় পত্র</p><button onclick="showNote('বাংলা')">Open Notes</button></div>
+      <div class="card"><h3>English</h3><p class="muted">1st &amp; 2nd Paper</p><button onclick="showNote('English')">Open Notes</button></div>
+      <div class="card"><h3>ICT</h3><p class="muted">তথ্য ও যোগাযোগ প্রযুক্তি</p><button onclick="showNote('ICT')">Open Notes</button></div>
+      <div class="card"><h3>Group Subjects</h3><p class="muted">নিজের গ্রুপ অনুযায়ী</p><button onclick="showNote('Group Subjects')">Open Notes</button></div>
+    </div>
+    <div class="card" id="noteBox" hidden style="margin-top:12px"><h3 id="noteTitle">Notes</h3><p id="noteText"></p><p class="muted">এটি নমুনা নোট। নিজের পাঠ্যবই অনুসারে অধ্যায়ের নোট যোগ করো।</p></div>
+  </section>
+  <section id="practice">
+    <h2>📝 MCQ Practice</h2>
+    <div class="card">
+      <p class="muted">নমুনা প্রশ্ন — উত্তর নির্বাচন করো।</p>
+      <h3 id="question">HTML-এর পূর্ণরূপ কী?</h3><div id="options"></div>
+      <p id="feedback" aria-live="polite"></p>
+      <div class="row"><span id="quizScore" class="muted">স্কোর: ০</span><button id="nextBtn" onclick="nextQuestion()">পরের প্রশ্ন →</button></div>
+    </div>
+  </section>
+  <section id="routine">
+    <h2>🗓️ Study Routine</h2>
+    <div class="card">
+      <label for="day"><b>দিন নির্বাচন করো</b></label>
+      <select id="day" onchange="showRoutine()"><option>Saturday</option><option>Sunday</option><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option></select>
+      <div id="routineText"></div><p class="muted">নিজের ক্লাস ও বিশ্রামের সময় অনুযায়ী রুটিন পরিবর্তন করো।</p>
+    </div>
+  </section>
+  <section id="progress">
+    <h2>📈 My Progress</h2>
+    <div class="card">
+      <div class="row"><b>আজকের পড়াশোনা</b><span id="progressLabel">০ মিনিট</span></div>
+      <p class="muted">আজ কত মিনিট পড়েছ, নিচে যোগ করো।</p><div class="bar"><div id="progressBar"></div></div>
+      <div class="row" style="margin-top:14px;flex-wrap:wrap"><button onclick="addStudy(15)">+১৫ মিনিট</button><button onclick="addStudy(30)">+৩০ মিনিট</button><button onclick="resetStudy()" style="background:#64748b">Reset</button></div>
+      <p id="goalText" class="muted">দৈনিক লক্ষ্য: ১২০ মিনিট</p>
+    </div>
+  </section>
+</main>
+<footer><b>Shuvo Study Hub</b><br>Keep Learning. Keep Growing. 🌱</footer>
+<script>
+const notes={
+"বাংলা":"বাংলা পাঠ: গদ্য, পদ্য, ব্যাকরণ ও লিখিত অংশের জন্য নিজের নোট তৈরি করো।",
+"English":"English practice: Reading, grammar, vocabulary, paragraph and writing.",
+"ICT":"ICT topics: Number systems, HTML, programming, databases and networking.",
+"Group Subjects":"তোমার গ্রুপের বিষয় নির্বাচন করে অধ্যায়ভিত্তিক নোট যোগ করো।"
+};
+function showNote(subject){
+ document.getElementById("noteBox").hidden=false;
+ document.getElementById("noteTitle").textContent=subject+" Notes";
+ document.getElementById("noteText").textContent=notes[subject];
+ document.getElementById("noteBox").scrollIntoView({behavior:"smooth"});
+}
+function showRoutine(){
+ const day=document.getElementById("day").value;
+ const first=["Saturday","Sunday","Monday","Tuesday"].includes(day);
+ document.getElementById("routineText").innerHTML=first
+ ?"<p>📘 ১ম পত্রের বিষয় — ৪৫ মিনিট</p><p>✍️ অনুশীলন ও রিভিশন — ৩০ মিনিট</p>"
+ :"<p>📗 ২য় পত্রের বিষয় — ৪৫ মিনিট</p><p>✍️ অনুশীলন ও রিভিশন — ৩০ মিনিট</p>";
+}
+showRoutine();
+const questions=[
+ {q:"HTML-এর পূর্ণরূপ কী?",a:["Hyper Text Markup Language","High Text Machine Language","Home Tool Markup Language"],correct:0},
+ {q:"কম্পিউটারের CPU-কে সাধারণত কী বলা হয়?",a:["মনিটর","প্রসেসর বা কেন্দ্রীয় প্রক্রিয়াকরণ একক","কিবোর্ড"],correct:1},
+ {q:"এক বাইটে সাধারণত কত বিট থাকে?",a:["৪","৮","১৬"],correct:1}
+];
+let qIndex=0,score=0,answered=false;
+function renderQuestion(){
+ const q=questions[qIndex];
+ document.getElementById("question").textContent=(qIndex+1)+". "+q.q;
+ document.getElementById("options").innerHTML="";
+ document.getElementById("feedback").textContent="";
+ answered=false;
+ q.a.forEach((answer,i)=>{
+  const b=document.createElement("button");b.className="option";b.textContent=answer;
+  b.onclick=()=>checkAnswer(i);document.getElementById("options").appendChild(b);
+ });
+ document.getElementById("nextBtn").textContent=qIndex===questions.length-1?"আবার শুরু ↻":"পরের প্রশ্ন →";
+}
+function checkAnswer(i){
+ if(answered)return;answered=true;
+ const correct=questions[qIndex].correct;if(i===correct)score++;
+ document.querySelectorAll(".option").forEach(b=>b.disabled=true);
+ document.getElementById("feedback").textContent=i===correct?"✅ সঠিক উত্তর!":"❌ সঠিক উত্তর: "+questions[qIndex].a[correct];
+ document.getElementById("quizScore").textContent="স্কোর: "+score+" / "+(qIndex+1);
+}
+function nextQuestion(){
+ if(qIndex===questions.length-1){qIndex=0;score=0;document.getElementById("quizScore").textContent="স্কোর: ০";}
+ else qIndex++;renderQuestion();
+}
+renderQuestion();
+function todayKey(){const d=new Date();return "study-"+d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();}
+function getStudy(){return Number(localStorage.getItem(todayKey())||0);}
+function updateStudy(){
+ const mins=getStudy();document.getElementById("progressLabel").textContent=mins+" মিনিট";
+ document.getElementById("progressBar").style.width=Math.min(100,mins/120*100)+"%";
+ document.getElementById("goalText").textContent=mins>=120?"🎉 আজকের লক্ষ্য পূরণ হয়েছে!":"দৈনিক লক্ষ্য: ১২০ মিনিট | বাকি: "+(120-mins)+" মিনিট";
+}
+function addStudy(mins){localStorage.setItem(todayKey(),getStudy()+mins);updateStudy();}
+function resetStudy(){localStorage.removeItem(todayKey());updateStudy();}
+updateStudy();
+</script>
+</body>
+</html>
